@@ -1,0 +1,18 @@
+    define channel 18
+    var store = 0
+    event ui.touch[channel]
+        if ui.touch[channel] == ui.event
+            if special.program.level <= -40
+                special.program.level = store
+            else
+                store = special.program.level
+                special.program.level = -40
+            end
+        end
+    end
+    event ui.draw [channel]
+        ui.fontmode = ui.fontmode.center
+        ui.color = ui.color.red
+        ui.draw.text(special.program.level <= -40 ? "MUTE" : "")
+    end
+//05/07/23 Chad.P MCXD 5.0.4.5846

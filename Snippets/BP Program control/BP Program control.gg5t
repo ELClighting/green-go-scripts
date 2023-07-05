@@ -1,0 +1,29 @@
+    var store = 0
+    event ui.button[ui.bpx.4]
+        if ui.button[ui.bpx.4] == ui.button.released
+            if special.program.level <= -40
+                special.program.level = store
+            else
+                if special.program.level == store
+                    special.program.level = -40
+                else
+                    store = special.program.level
+                end
+            end
+        end
+        event ui.encoder[ui.bpx.encoder.left]
+            if ui.button[ui.bpx.4] == ui.button.pressed
+                special.program.level = special.program.level + ui.event.value
+            else
+                cancel ui.encoder[ui.bpx.encoder.left]
+            end
+        end
+    end
+    event ui.draw
+        ui.color = ui.color.black
+        ui.draw.rectangle(49,33,47,31)
+        ui.color = special.program.level <= -40 ? ui.color.red : ui.color.white
+        ui.draw.text.at(53,39,"PGM")
+        ui.draw.level(55,55,special.program.level)
+    end
+//05/07/23 Chad.P BPX 5.0.4.5846
