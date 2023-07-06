@@ -1,0 +1,28 @@
+
+    var touch = 0
+    var touchi = 0
+    var butt = 0
+    var butti = 0
+
+    event ui.draw
+        ui.clear()
+        if device.type() == 258
+            ui.draw.text.at( 0,10,"Button: ",butti==0?0:butti- 1,", ",butt)
+        else
+            ui.draw.text.at( 0,10,"Touch: ",touchi,", ",touch)
+            ui.draw.text.at( 0,40,"Button: ",butti,", ",butt)
+        end
+    end
+
+    for x = 1 to 18
+        event ui.touch[x]
+            touch = ui.event.value
+            touchi = ui.event.index
+        end
+        event ui.button[x]
+            butt = ui.event.value
+            butti = ui.event.index
+        end
+    end
+
+//06/07/23 Chad.P MCXD BPX 5.0.4.5846
