@@ -1,0 +1,16 @@
+
+    //Menu
+    var index = 0
+    event ui.draw
+        ui.clear()
+        ui.draw.text(index)
+        ui.fontmode = ui.fontmode.center
+        ui.draw.text(index == 0 ? "Title 0" : index == 1 ? "Title 1" : index == 2 ? "Title 2" : index == 3 ? "Title 3" : index == 4 ? "Title 4" : "")
+    end
+
+    event ui.encoder
+        index = index + ui.event.value
+        index = index > 4 ? 4 : index < 0 ? 0 : ""
+    end
+
+//07/07/23 Chad.P MCXD BPX 5.0.4.5846
