@@ -1,0 +1,25 @@
+
+    //Menu
+    var index = 0
+    event ui.draw
+        ui.clear()
+        ui.draw.text(index)
+        ui.font = 6
+        ui.color = index == 0 ? ui.color.red : ui.color.white
+        ui.draw.text.at(5,5,"Title")
+        ui.color = index == 1 ? ui.color.red : ui.color.white
+        ui.draw.text.at(5,25,"Title")
+        ui.color = index == 2 ? ui.color.red : ui.color.white
+        ui.draw.text.at(5,45,"Title")
+        ui.color = index == 3 ? ui.color.red : ui.color.white
+        ui.draw.text.at(device.type() == 258 ? 50 : 5,device.type() == 258 ? 5 : 65,"Title")
+        ui.color = index == 4 ? ui.color.red : ui.color.white
+        ui.draw.text.at(device.type() == 258 ? 50 : 5,device.type() == 258 ? 25 : 85,"Title")
+    end
+
+    event ui.encoder
+        index = index + ui.event.value
+        index = index > 4 ? 4 : index < 0 ? 0 : ""
+    end
+
+//07/07/23 Chad.P MCXD BPX 5.0.4.5846
