@@ -1,7 +1,6 @@
 
     var temp = 0
     var state = 0
-
     var bit = 0
     var mod = 0
 
@@ -33,7 +32,7 @@
             end
         end
     end
-    
+
     event ui.draw[15]
         ui.draw.button("clear mem",1,0)
     end
