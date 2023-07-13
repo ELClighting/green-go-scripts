@@ -3,4 +3,4 @@
 - 06/07/23 Chad.P MCXD WPX BPX 5.0.4.5846
 
 
-Displays which button is pressed without replacing function
+Displays which button is pressed without replacing that buttons function
