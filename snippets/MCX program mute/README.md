@@ -3,6 +3,6 @@
 - 05/07/23 Chad.P MCXD 5.0.4.5846
 
 
-Designed to overlay the "Program Audio Level" button function, allowing mute toggle via touch
+Designed to overlay the "Program Audio Level" function button, allowing mute toggle via touch
 
-"channel" = set program audio button
+"channel" = program level function button assignment number
