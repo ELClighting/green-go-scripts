@@ -17,7 +17,7 @@
     var pm = 0
     var pop = 0
 
-    settings.popup = settings.popup.system
+    settings.popup = settings.popup.cue.direct
 
     function cvol()
         channel.level[chan] = channel.level[chan] <= threshold ? channel.level[chan] + (ui.event.value * low_step) : channel.level[chan] + (ui.event.value *high_step)        
