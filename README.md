@@ -6,4 +6,3 @@ The scripts are sorted into categories:
 - `local` (scripts that change something local to a device)
 - `osc` (remote control/operation)
 - `script-to-script` (device to device control/operation)
-- `snippets` (Prefabricated code segments/functions)
