@@ -1,0 +1,128 @@
+
+    define low_step 3
+    define high_step 1
+    define threshold -6
+    define talk_colour ui.color.red
+    define listen_colour ui.color.green
+    define idle_colour ui.color.black
+
+    var page = 0
+    var a = 1
+    var b = 2
+    var c = 3
+    var d = 4
+    var butt = 0
+    var chan = 0
+    var uibpx = 0
+    var pm = 0
+    var pop = 0
+
+    settings.popup = settings.popup.cue.direct
+
+    function cvol()
+        channel.level[chan] = channel.level[chan] <= threshold ? channel.level[chan] + (ui.event.value * low_step) : channel.level[chan] + (ui.event.value *high_step)        
+    end
+
+    function mvol()
+        audio.main.level = audio.main.level <= threshold ? audio.main.level + (ui.event.value * low_step) : audio.main.level + (ui.event.value *high_step)
+        return 1
+    end
+
+    function reass()
+        a = (4*page)+1
+        b = (4*page)+2
+        c = (4*page)+3
+        d = (4*page)+4
+        butt = ui.button[ui.bpx.1] == ui.button.pressed ? 1 : ui.button[ui.bpx.2] == ui.button.pressed ? 2 : ui.button[ui.bpx.3] == ui.button.pressed ? 3 : ui.button[ui.bpx.4] == ui.button.pressed ? 4 : 0
+        chan = butt + (4*page)
+        uibpx = butt == 1 ? ui.bpx.1 : butt == 2 ? ui.bpx.2 : butt == 3 ? ui.bpx.3 : butt == 4 ? ui.bpx.4 : 0
+        pm = channel.assign[29] != 0 ? 7 : channel.assign[25] != 0 ? 6 : channel.assign[21] != 0 ? 5 : channel.assign[15] != 0 ? 4 : channel.assign[13] != 0 ? 3 : channel.assign[9] != 0 ? 2 : 1
+        ui.button[ui.bpx.1] = channel.talk[a] == channel.talk.on ? talk_colour : channel.input.status[a] == 3 ? listen_colour : idle_colour
+        ui.button[ui.bpx.2] = channel.talk[b] == channel.talk.on ? talk_colour : channel.input.status[b] == 3 ? listen_colour : idle_colour
+        ui.button[ui.bpx.3] = channel.talk[c] == channel.talk.on ? talk_colour : channel.input.status[c] == 3 ? listen_colour : idle_colour
+        ui.button[ui.bpx.4] = channel.talk[d] == channel.talk.on ? talk_colour : channel.input.status[d] == 3 ? listen_colour : idle_colour
+    end
+
+    function pages()
+        page = page + ui.event.value
+        if page >= pm
+            page = pm
+        end
+        if page <= 0
+            page = 0
+        end
+    end
+
+    function chanui()
+        ui.clear()
+        ui.color = ui.color.white
+        ui.draw.text.at( 1, 0,"@",a)
+        ui.draw.text.at( 1,40,"@",b)
+        ui.draw.text.at(50, 0,"@",c)
+        ui.draw.text.at(50,40,"@",d)
+        ui.color = ui.color.yellow
+        ui.draw.text.at( 2,11,channel.input.status[a]?a:"X")
+        ui.draw.text.at( 2,51,channel.input.status[b]?b:"X")
+        ui.draw.text.at(50,11,channel.input.status[c]?c:"X")
+        ui.draw.text.at(50,51,channel.input.status[d]?d:"X")
+        ui.draw.level(15,15,channel.level[a],1)
+        ui.draw.level(15,55,channel.level[b],1)
+        ui.draw.level(65,15,channel.level[c],1)
+        ui.draw.level(65,55,channel.level[d],1)   
+    end 
+
+    function popupui()
+        for chan = 1 to 32
+            pop = channel.input.status[chan] == 3 ? chan : ""
+        end
+        if channel.input.status[pop] != 1
+            if pop != 0
+                if pop != a
+                    if pop != b
+                        if pop != c
+                            if pop != d
+                                ui.color = ui.color.black
+                                ui.draw.rectangle (-1,25,100,15)
+                                ui.color = ui.color.white
+                                ui.draw.open.rectangle (-1,25,100,15)
+                                ui.fontmode = ui.fontmode.center
+                                ui.draw.text("@",pop)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    event ui.button[ui.bpx.1]
+        channel.talk[a] = ui.button[ui.bpx.1] == ui.button.pressed ? channel.talk[a] != channel.talk.on ? channel.talk.on : channel.talk.off : ui.event.value > 200 ? channel.talk.off : ""
+    end
+
+    event ui.button[ui.bpx.2]
+        channel.talk[b] = ui.button[ui.bpx.2] == ui.button.pressed ? channel.talk[b] != channel.talk.on ? channel.talk.on : channel.talk.off : ui.event.value > 200 ? channel.talk.off : ""
+    end
+
+    event ui.button[ui.bpx.3]
+        channel.talk[c] = ui.button[ui.bpx.3] == ui.button.pressed ? channel.talk[c] != channel.talk.on ? channel.talk.on : channel.talk.off : ui.event.value > 200 ? channel.talk.off : ""
+    end
+
+    event ui.button[ui.bpx.4]
+        channel.talk[d] = ui.button[ui.bpx.4] == ui.button.pressed ? channel.talk[d] != channel.talk.on ? channel.talk.on : channel.talk.off : ui.event.value > 200 ? channel.talk.off : ""
+    end
+
+    event ui.encoder[ui.bpx.encoder.left]
+        i = butt != 0 ? cvol() : pages()
+    end
+
+    event ui.encoder[ui.bpx.encoder.right]
+        i = butt != 0 ? cvol() : mvol()
+    end
+
+    event ui.draw
+        reass()
+        chanui()
+        popupui()
+    end
+
+//12/07/23 Chad.P BPX 5.0.4.5846

@@ -1,0 +1,56 @@
+
+    var on = 0
+    var p1 = 20
+    var p2 = 20
+    var py = 1
+    var px = 1
+    var my = 1
+    var mx = 1
+    var time = 0
+    var score1 = 0
+    var score2 = 0
+
+    event ui.draw
+        p1 = p1 > 50 ? 50 : p1 < 0 ? 0 : ""
+        p2 = p2 > 50 ? 50 : p2 < 0 ? 0 : ""
+        ui.clear()
+        ui.draw.rectangle(10,p1,2,15)
+        ui.draw.rectangle(80,p2,2,15)
+        ui.draw.text.at(px, py, 0)
+        ui.draw.text.at( 0, 0, score1)
+        ui.draw.text.at(40, 0, time/10)
+        ui.draw.text.at(90, 0, score2)   
+        if on == 1
+            py = py + my
+            px = px + mx
+            my = py >= 50 ? -1 : py <= 0 ? 1 : ""
+            mx = (px >= 90 | (px == 75 & (py > p2 - 15) & (py < p2 + 15)) ? -1 : "") 
+            mx = (px <=  0 | (px == 12 & (py > p1 - 15) & (py < p1 + 15)) ?  1 : "")
+            time = time - 1
+            on = time <= 0 ? 0 : ""
+            score1 = px == 90 ? score1 + 1 : ""
+            score2 = px == 0 ? score2 + 1 : ""
+        else
+            time = 1000
+            py = 1
+            px = 1
+        end
+    end
+
+    event ui.encoder[ui.bpx.encoder.left]
+        p1 = p1 - (ui.event.value * 5)
+    end
+
+    event ui.encoder[ui.bpx.encoder.right]
+        p2 = p2 - (ui.event.value * 5)
+    end
+
+    for x = 2 to 5
+        event ui.button[x]
+            if ui.button[ui.bpx.1] == ui.button.pressed
+                on = on == 0 ? 1 : 0
+            end
+        end
+    end
+
+//07/07/23 Chad.P BPX 5.0.4.5846
