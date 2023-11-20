@@ -2,7 +2,6 @@
 // replaces function of "button 3" (top right) to toggle mute/unmute of channel 1
 event ui.button[ui.bpx.3]
     channel.listen[1] = ui.button[ui.bpx.3] != ui.button.released ? "" : channel.listen[1] == channel.listen.on ? channel.listen.off : channel.listen.on
-
 end
 
 // replaces function of "button 4" (bottom right) to toggle mute/unmute of channel 2
