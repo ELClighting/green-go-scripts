@@ -1,0 +1,22 @@
+
+// replaces function of "button 3" (top right) to toggle mute/unmute of channel 1
+event ui.button[ui.bpx.3]
+    channel.listen[1] = ui.button[ui.bpx.3] != ui.button.released ? "" : channel.listen[1] == channel.listen.on ? channel.listen.off : channel.listen.on
+
+end
+
+// replaces function of "button 4" (bottom right) to toggle mute/unmute of channel 2
+event ui.button[ui.bpx.4]
+    channel.listen[2] = ui.button[ui.bpx.4] != ui.button.released ? "" : channel.listen[2] == channel.listen.on ? channel.listen.off : channel.listen.on
+end
+
+// adds elements to display, overlaying red 'call' bars with yellow 'listen' bars, changing the colour of LED dependant on state of mute
+event ui.draw
+    ui.button[ui.bpx.3] = channel.listen[1] == channel.listen.on ? ui.color.yellow : ui.color.blue
+    ui.button[ui.bpx.4] = channel.listen[2] == channel.listen.on ? ui.color.yellow : ui.color.blue
+    ui.color = ui.color.yellow
+    ui.draw.rectangle(92, 3, 6,26)
+    ui.draw.rectangle(92,35, 6,26)
+end
+
+//20/11/23 Chad.P BPX 5.0.4.5846
