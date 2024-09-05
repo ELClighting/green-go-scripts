@@ -1,6 +1,6 @@
 
-# Listen function for 2 channel mode of Beltpack X
+# Beacon call colour based on channel assigment colour
 
 - 05/09/24 HB BCN 5.0.7.9165
 
-Enabled the Beacon to display assigned channel when called
+Enables the Beacon to display assigned channel when called
