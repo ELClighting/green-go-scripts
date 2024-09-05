@@ -1,0 +1,3 @@
+event channel.input.call
+    ui.button[1] = channel.input.call[event.index] >= channel.call.on ? channel.color(event.index) : ui.color.black
+end
