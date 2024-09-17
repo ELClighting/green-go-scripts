@@ -1,38 +1,44 @@
 
-    var lock.button.1 = 1
-    var lock.button.2 = 2
+    var lock.button.1 = 2
+    var lock.button.2 = 3
+    var lock.button.3 = 4
     var lock = 1
 
-    if device.type() == 258
-        lock.button.1 = lock.button.1 + 1
-        lock.button.2 = lock.button.2 + 1
-    end
+function set_lock_state()
+    for x = 1 to 32
+        channel.talk[x] = channel.talk.off
+        channel.call[x] = channel.call.off
+        event ui.button[x]
 
-    event ui.draw 
-        if ui.button[lock.button.1] & ui.button[lock.button.2] == ui.button.pressed
-            timer[1] = 100
-            event timer[1]
-                lock = lock == 0 ? 1 : 0
-            end
-        end
-        for x = 1 to 32
-            if lock == 0 
-                channel.talk[x] = channel.talk.off
-                channel.call[x] = channel.call.off
-                event ui.button[x]
-
-                end
-                ui.clear()
-                ui.fontmode = ui.fontmode.center
-                ui.draw.text("Locked")
-                event ui.draw[x]
-                    ui.clear()
-                end
-            else
-                cancel ui.button[x]
-                cancel ui.draw[x]
-            end
         end
     end
+end
 
-//14/07/23 Chad.P MCXD BPX 5.0.4.5846
+function set_unlock_state()
+    for x = 1 to 32
+        cancel ui.button[x]
+    end
+end
+
+event ui.draw
+    if ui.button[lock.button.1] & ui.button[lock.button.2] & ui.button[lock.button.3] == ui.button.pressed
+        timer[1] = 100
+    end
+
+    if lock == 0
+        set_lock_state()
+        ui.clear()
+        ui.fontmode = ui.fontmode.center
+        ui.draw.text("locked")
+        // todo implement screens 2 and 3 for mcx
+    end
+    if lock == 1
+        set_unlock_state()
+    end
+end
+
+event timer[1]
+    lock = lock == 0 ? 1 : 0
+end 
+
+//03/09/24 HB BPX 5.0.7.9165
