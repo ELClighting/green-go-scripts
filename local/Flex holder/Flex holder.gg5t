@@ -1,0 +1,15 @@
+
+    event ui.draw
+        ui.color = ui.color.white
+        if device.bpx.ui.mode == device.bpx.ui.mode.2chan
+            ui.draw.text.at(25, 5,channel.channelmode[1] == channel.channelmode.flex ? channel.assign[1] == 0 ? "Flex" :"":"")
+            ui.draw.text.at(25,37,channel.channelmode[2] == channel.channelmode.flex ? channel.assign[2] == 0 ? "Flex" :"":"")
+        else
+            ui.draw.text.at(17, 5,channel.channelmode[1] == channel.channelmode.flex ? channel.assign[1] == 0 ? "Flex" :"":"")
+            ui.draw.text.at(17,40,channel.channelmode[2] == channel.channelmode.flex ? channel.assign[2] == 0 ? "Flex" :"":"")
+            ui.draw.text.at(65, 5,channel.channelmode[3] == channel.channelmode.flex ? channel.assign[3] == 0 ? "Flex" :"":"")
+            ui.draw.text.at(65,40,channel.channelmode[4] == channel.channelmode.flex ? device.bpx.ui.mode == device.bpx.ui.mode.4chan ? channel.assign[4] == 0 ? "Flex" :"":"":"")
+        end
+    end 
+
+//CP20250519 5.1.2 BPX,WBPX
