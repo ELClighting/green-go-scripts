@@ -1,0 +1,14 @@
+
+    event gpio.input[1] // listening for change on gpio.input[1]
+        if gpio.input[1] == gpio.input.on //only react to press/"on" state (do nothing on release/"off" state)
+            if channel.talk[1] == channel.talk.off //if channel talk is off turn it on, "else" (if it is not off it must be on) turn it off
+                channel.talk[1] = channel.talk.on
+            else
+                channel.talk[1] = channel.talk.off
+            end
+        end
+    end
+
+    //event gpio.input[2] //streamlined
+    //    channel.talk[1] = gpio.input[2] == gpio.input.on ? channel.talk[1] == channel.talk.off ? channel.talk.on : channel.talk.off : ""
+    //end
