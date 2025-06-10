@@ -1,0 +1,43 @@
+
+    var i = 0 // input channel
+    var f = 0 // set gpio function (gpio.input.function[i])
+    var c = 0 // assigned comms channel (gpio.input.value[i])
+    var t = 0 // channel talkmode (channel.talkmode[i])
+    var b = 0 // button press
+    var l = 0 // held state
+
+    function gpi()
+        i = event.index
+        f = gpio.input.function[i]
+        c = gpio.input.value[i] 
+        t = channel.talkmode[c]
+        b = gpio.input[i] == gpio.input.on ? b == 1 ? 0 : 1 : b == 1 ? l == 1 ? 0 : "" :channel.talk[c] == channel.talk.on ? 0 : "" 
+        // in1 & b1 = 0, in1 & b0 = 1, in0 & b1 & l1 = 0, in0 & b1 & l0 = ignore, in0 & b0 & talk on = 0
+        l = 0
+        if f == gpio.input.function.talk
+            channel.talk[c] = channel.talk.on
+            channel.talk[c] = b == 1 ? l == 1 ? channel.talk.off : "" :channel.talk[c] == channel.talk.off ? channel.talk.on : channel.talk.off 
+            // b1 & l1 = talk off, b1 & l0 = ignore, b0 & talk off = talk on, b0 & talk on = talk off
+            event timer[1]
+                timer[1] = 300
+                l = b == 1 ? 1 : ""
+            end
+            timer[1] = t == channel.talkmode.momentary ? 1 : t == channel.talkmode.latch ? 0 : 300 
+            // momentary = 1, latch = 0, else 300
+        end
+    end 
+
+    event gpio.input[1]
+        gpi()
+    end
+
+    event gpio.input[2]
+        gpi()
+    end
+
+    //event ui.draw //debug
+    //    ui.clear()
+    //    ui.draw.text(" i",i," f",f," c",c," t",t," b",b," l",l) 
+    //end
+
+// CP250610 MCXD 5.1.3
