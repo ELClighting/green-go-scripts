@@ -1,0 +1,24 @@
+var timeout = settings.cue.timeout
+
+function DirectGo()
+    for x = 1 to 18
+        if channel.assign[x] != 0 & device.screen.mode == device.screen.mode.cue
+            event ui.touch[x]
+                channel.cue[ui.event.index] = ui.event[ui.event.index] == ui.event.press ? channel.cue[ui.event.index] == channel.cue.go ? channel.cue.off : channel.cue.go : ""
+                event timer
+                    channel.cue[event.index] = channel.cue.off
+                    timer = timeout
+                end
+                timer = timeout
+            end
+        else
+            cancel ui.touch[x]
+        end
+    end
+end
+
+event ui.draw[7]
+    DirectGo()
+end
+
+//12/07/23 Chad.P MCXD 5.1.3.21454
