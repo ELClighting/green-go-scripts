@@ -7,25 +7,27 @@
     end
 
 //BCN
-    define BCN_channel 1            //associated channel 
-    define colour1 ui.color.green   //first colour
-    define colour2 ui.color.blue    //second colour
-    define idle ui.color.black      //colour when inactive
-    define tic 100                  //speed of flashing
 
-    var channel_colour = 0
-    event channel.input.call[BCN_channel]
-        if channel.input.call[BCN_channel] == channel.input.call.active
-            timer[1] = tic
-            event timer[1]
+        define BCN_channel 1            //associated channel 
+        define colour1 ui.color.green   //first colour
+        define colour2 ui.color.blue    //second colour
+        define idle ui.color.black      //colour when inactive
+        define tic 100                  //speed of flashing
+
+    if device.type() == 897             // only load on BCN     
+        var channel_colour = 0
+        event channel.input.call[BCN_channel]
+            if channel.input.call[BCN_channel] == channel.input.call.active
                 timer[1] = tic
-                channel_colour = channel_colour == colour1 ? colour2 : colour1
-                ui.button[1] = channel_colour
+                event timer[1]
+                    timer[1] = tic
+                    channel_colour = channel_colour == colour1 ? colour2 : colour1
+                    ui.button[1] = channel_colour
+                end
+            else
+                cancel timer[1] 
+                ui.button[1] = idle
             end
-        else
-            cancel timer[1] 
-            ui.button[1] = idle
-        end
-    end         
-
+        end        
+    end
 //15/09/25 Chad.P MCXD BCN 5.2.0.23516
