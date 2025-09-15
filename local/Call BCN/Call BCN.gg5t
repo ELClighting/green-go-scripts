@@ -1,0 +1,31 @@
+
+//MCX
+    define MCX_channel 1            //associated button & channel
+
+    event ui.button[MCX_channel]
+        channel.call[MCX_channel] = ui.button[MCX_channel] == ui.button.pressed ? channel.call.on : channel.call.off
+    end
+
+//BCN
+    define BCN_channel 1            //associated channel 
+    define colour1 ui.color.green   //first colour
+    define colour2 ui.color.blue    //second colour
+    define idle ui.color.black      //colour when inactive
+    define tic 100                  //speed of flashing
+
+    var channel_colour = 0
+    event channel.input.call[BCN_channel]
+        if channel.input.call[BCN_channel] == channel.input.call.active
+            timer[1] = tic
+            event timer[1]
+                timer[1] = tic
+                channel_colour = channel_colour == colour1 ? colour2 : colour1
+                ui.button[1] = channel_colour
+            end
+        else
+            cancel timer[1] 
+            ui.button[1] = idle
+        end
+    end         
+
+//15/09/25 Chad.P MCXD BCN 5.2.0.23516
