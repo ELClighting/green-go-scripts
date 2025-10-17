@@ -4,7 +4,7 @@
 // Button (1..18: MCX*, 1..6: WPX) for toggling talk screen mode (set to "0" to disable)
 // NOTE: If disabled, other screen mode toggles will not have any effect!
 define FUNC_BTN 1
-
+https://github.com/ELClighting/green-go-scripts/blob/main/local/WPX_Talk_Screen_Mode.gg5t
 // Channels (1..32) being controlled by touch-screens (set to "0" to disable)
 // NOTE: CH* and TOUCH* are linked logically. So, setting CH1 to "0" will also disable TOUCH1
 define CH1 4
