@@ -1,0 +1,152 @@
+// Created by Timo Toups
+
+// ======== CONFIG ========
+// Button (1..18: MCX*, 1..6: WPX) for toggling talk screen mode (set to "0" to disable)
+// NOTE: If disabled, other screen mode toggles will not have any effect!
+define FUNC_BTN 1
+
+// Channels (1..32) being controlled by touch-screens (set to "0" to disable)
+// NOTE: CH* and TOUCH* are linked logically. So, setting CH1 to "0" will also disable TOUCH1
+define CH1 4
+define CH2 5
+define CH3 6
+// Touchscreen sections (1..18: MCX*, 1..6: WPX) without buttons (set to "0" to disable)
+define TOUCH1 4
+define TOUCH2 5
+define TOUCH3 6
+
+// ======== STATES ========
+// === DON'T EDIT BELOW ===
+var talk_mode = 0
+var touch_attached = 0
+var ptt_helper = 0
+
+// ======== HELPER FUNCTIONS ========
+// Touch talk controls for a given channel
+function handle_talk(ch)
+    if channel.talkmode[ch] != channel.talkmode.disabled
+        if channel.talkmode[ch] == channel.talkmode.momentary
+            channel.talk[ch] = (ui.event[event.index] == ui.event.press) ? channel.talk.on : channel.talk.off
+        end
+        if channel.talkmode[ch] == channel.talkmode.latch & ui.event[event.index] == ui.event.press
+            channel.talk[ch] = (channel.talk[ch] >= channel.talk.on) ? channel.talk.off : channel.talk.on
+        end
+        if channel.talkmode[ch] == channel.talkmode.latchmom
+            if ui.event[event.index] == ui.event.press
+                if channel.talk[ch] >= channel.talk.on
+                    channel.talk[ch] = channel.talk.off
+                    ptt_helper = 0
+                else
+                    channel.talk[ch] = channel.talk.on
+                    ptt_helper = 1
+                    timer[10] = 250
+                end
+            else
+                if ptt_helper == 0
+                    channel.talk[ch] = channel.talk.off
+                end
+            end
+        end
+    end
+end
+
+// Timer for Latch/Momentary talk mode (PTT release)
+event timer[10]
+    ptt_helper = 0
+end
+
+// Release touch controls and reset custom channel UI
+function reset_defaults(btn)
+    if talk_mode == 1
+        cancel ui.touch[btn]
+        cancel ui.draw[btn]
+    end
+end
+
+// Custom channel UI to visualize active talk
+function channel_ui(ch)
+    ui.window(1,36,320,204)
+    ui.font = ui.font.tft.large
+    ui.clear(channel.talk[ch] >= channel.talk.on ? ui.color.green : ui.color.black)
+    ui.color = channel.talk[ch] >= channel.talk.on ? ui.color.black : ui.color.white
+    ui.draw.text(" ","@", ch)
+end
+
+// Activate talk mode, override channel UI and touch controls
+function activate_mode()
+    // Disable other screen modes and enable talk screen mode
+    device.screen.mode = 3
+    talk_mode = 1
+    // Check TOUCH* and CH* definitions before enabling
+    if (TOUCH1 > 0) & (CH1 > 0)
+        event ui.touch[TOUCH1]
+            handle_talk(CH1)
+        end
+        event ui.draw[TOUCH1]
+            channel_ui(CH1)
+        end
+    end
+    if (TOUCH2 > 0) & (CH2 > 0)
+        event ui.touch[TOUCH2]
+            handle_talk(CH2)
+        end
+        event ui.draw[TOUCH2]
+            channel_ui(CH2)
+        end
+    end    
+    if (TOUCH3 > 0) & (CH3 > 0)
+        event ui.touch[TOUCH3]
+            handle_talk(CH3)
+        end
+        event ui.draw[TOUCH3]
+            channel_ui(CH3)
+        end
+    end
+end
+
+// Disable talk mode and release/reset to default
+function disable_mode()
+    reset_defaults(TOUCH1)
+    reset_defaults(TOUCH2)
+    reset_defaults(TOUCH3)
+    talk_mode = 0
+end
+
+// Toggle talk screen mode function button
+function toggle_mode()
+    if ui.event[FUNC_BTN] == ui.event.press
+        if talk_mode == 0
+            activate_mode()
+        else
+            disable_mode()
+        end
+    end
+end
+
+// ======== MAIN EVENTS ========
+// Use screen mode toggle button if FUNC_BTN is not "0"
+if FUNC_BTN > 0
+    // Events capturing interactions with talk screen mode button
+    event ui.button[FUNC_BTN]
+        toggle_mode()
+    end
+    event ui.touch[FUNC_BTN]
+        toggle_mode()
+    end
+
+    // Create a button for the talk screen mode
+    event ui.draw[FUNC_BTN]
+        ui.draw.button("Talk", ui.color.green, (talk_mode != 0) ? 1 : 0)
+        ui.button[FUNC_BTN] = talk_mode == 0 ? ui.color.blue : ui.color.green
+    end
+
+    // Toggle screen mode functions
+    event device.screen.mode
+        if device.screen.mode != 3 & talk_mode != 0
+            disable_mode()
+        end
+    end
+// Otherwise disable toggle and statically enable talk screen mode
+else
+    activate_mode()
+end
