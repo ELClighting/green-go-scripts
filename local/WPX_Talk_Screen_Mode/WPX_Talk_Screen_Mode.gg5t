@@ -65,7 +65,7 @@ end
 
 // Custom channel UI to visualize active talk
 function channel_ui(ch)
-    ui.window(1,36,320,204)
+    ui.window(1,35,320,205)
     ui.font = ui.font.tft.large
     ui.clear(channel.talk[ch] >= channel.talk.on ? ui.color.green : ui.color.black)
     ui.color = channel.talk[ch] >= channel.talk.on ? ui.color.black : ui.color.white
