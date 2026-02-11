@@ -23,7 +23,8 @@
     end
 
     event ui.draw[1] //script load check (red square top left of channel 1)
-        ui.draw.rectangle(5,5,5,5,0,1)
+        ui.draw.rectangle(5,5,5,5)
     end
+
 
 // CP MCX.5.2.1 20260211
