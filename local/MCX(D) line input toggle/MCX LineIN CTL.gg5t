@@ -1,0 +1,29 @@
+
+    define normal_control_channel 1 // location of channel mode: normal control button/channel
+    define GPIO_control_channel 2 // location of channel mode: GPIO control button/channel
+    define audio_channel 24 // Group ID of line input destination
+
+    event channel.talk[normal_control_channel] // listen for change on channel talk status: if "on", assign line input destination, else unassign
+        if channel.talk[normal_control_channel] == channel.talk.on
+            linein.assign[1] = audio_channel
+        end
+        if channel.talk[normal_control_channel] == channel.talk.off
+            linein.assign[1] = 0
+            channel.gpiocontrol[GPIO_control_channel] = channel.gpiocontrol.off // mirror off control
+        end
+    end
+
+    event channel.gpiocontrol[GPIO_control_channel] // listen for change on channel GPIO control status: if "on", assign line input destination, else unassign
+        if channel.gpiocontrol[GPIO_control_channel] == channel.gpiocontrol.on
+            linein.assign[1] = audio_channel
+        else
+            linein.assign[1] = 0
+            channel.talk[normal_control_channel] = channel.talk.off // mirror off control
+        end
+    end
+
+    event ui.draw[1] //script load check (red square top left of channel 1)
+        ui.draw.rectangle(5,5,5,5,0,1)
+    end
+
+// CP MCX.5.2.1 20260211
