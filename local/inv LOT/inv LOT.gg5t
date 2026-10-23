@@ -1,0 +1,5 @@
+event channel.talk[1]
+    channel.listen[1] = channel.talk[1] < 1 ? -12 : 0
+end
+
+//CP20261023
